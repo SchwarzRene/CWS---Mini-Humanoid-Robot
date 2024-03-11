@@ -2,7 +2,7 @@
 ## CWS-Overview:
 ### CWS is a mini humanoid robot developed for collecting world data and interagating with the world.
 
-- [Basic Concept](#BasicConcept)
+- [Basic Concept](#Basic-Concept)
 - [Electronics](#Electronics)
 - [To-Do](#To-Do)
 
