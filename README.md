@@ -74,12 +74,12 @@ The robots has
 
         - [ ] Arms
             - [ ] Right Arm
-                - [ ] 3D-Printing of Body parts
+                - [ ] 3D-Printing of Right Arm parts
                 - [ ] Assembling of different parts
                 - [ ] Wiring
 
             - [ ] Left Arm
-                - [ ] 3D-Printing of Body parts
+                - [ ] 3D-Printing of Left Arm parts
                 - [ ] Assembling of different parts
                 - [ ] Wiring
 
