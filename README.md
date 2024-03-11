@@ -1,23 +1,37 @@
-# CWS - Cotschi's Washing Maschine
+# CWSV5 - Mini Humanoid Robot
 ## CWS-Overview:
-CWS is a mini humanoid robot developed for collecting world data and interagating with the world.
+### CWS is a mini humanoid robot developed for collecting world data and interagating with the world.
 
-## Basic Concept
-The basic idea is to create a robot who is able to collect world data, like audio, video, ... and then send it to a server. This would be useful to train neural networks. The robot should be able to walk. The name referse to the first concept because it looked like a washing maschine with legs.
+- [Basic Concept](#BasicConcept)
+- [Electronics](#Electronics)
+- [To-Do](#To-Do)
+
+
+
+![Alt text](./documentation/main.PNG "Current CAD")
+
+## Basic-Concept
+The basic idea is to create a robot who is able to collect world data, like audio, video, ... and then send it to a server. This would be useful to train neural networks. The robot should also look like a human and should be able to walk.
 
 
 ## Electronics
 The robots has
-- Raspberry Pi Zero 1
-- Raspberry Pi Pico
-- 3 Microphones
-- 25 Servos, 5 for every leg, 6 for every arm and 3 for the head
-- A LCD-Touchdisplay
-- 3 Accelerometers
-- 1 Humanoid Air Sensor
-- 1 Compass
-- 3 Tof Sensors
-- 1 Night Vision Camera
+- 1 x Raspberry Pi Zero 1
+- 1 x Raspberry Pi Pico
+- 3 x Microphones
+- 26 x Servos, 
+    - 5 for every leg, 
+    - 6 for every arm,
+    - 4 for the head
+- 1 x LCD-Touchdisplay
+- 3 x Accelerometers
+- 1 x Humanoid Air Sensor
+- 1 x Air Preasure Sensor
+- 1 x Compass
+- 3 x Tof Sensors
+- 1 x Night Vision Camera
+- 1 x 20-000 mAh Power Bank
+
 
 ## To-Do
 - [ x ] Concept
@@ -32,9 +46,9 @@ The robots has
         - [ x ] Leg Concept
         - [ x ] CAD of Leg
     
-    - [ ] Body
-        - [ ] Arangement of parts
-        - [ ] CAD of Body
+    - [ x ] Body
+        - [ x ] Arangement of parts
+        - [ x ] CAD of Body
 
     - [ ] Arms
         - [ ] Concept of Arms
@@ -45,7 +59,7 @@ The robots has
         - [ ] Legs
             - [ ] Left Leg
                 - [ x ] 3D-Printing of Leg parts
-                - [ ] Assembling of different parts
+                - [ x ] Assembling of different parts
                 - [ ] Wiring
 
             - [ ] Right Leg
@@ -54,7 +68,7 @@ The robots has
                 - [ ] Wiring
         
         - [ ] Body
-            - [ ] 3D-Printing of Body parts
+            - [ x ] 3D-Printing of Body parts
             - [ ] Assembling of different parts
             - [ ] Wiring
 
