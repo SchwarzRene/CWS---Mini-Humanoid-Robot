@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Visualization Dashboard</title>
+  <style>
+    /* General Styles */
+/* General Styles */
+/* General Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+}
+
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Time Display */
+#time {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 153, 255, 0.8);
+}
+
+/* Compass */
+#compass {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #0099ff;
+  border-radius: 50%;
+  position: relative;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
+}
+
+#compass-pointer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%) rotate(0deg);
+}
+
+#compass-pointer-rect {
+  width: 10px;
+  height: 60px;
+  background-color: #0099ff;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#compass-pointer-tri {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 20px solid #0099ff;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#compass-center {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #0099ff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(0, 153, 255, 0.8);
+}
+
+#compass-circle-1 {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px dashed #0099ff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#compass-circle-2 {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px dashed #0099ff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#compass-cardinal-n {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+#compass-cardinal-e {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+#compass-cardinal-s {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+#compass-cardinal-w {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+/* Video Container */
+#video-container {
+  width: 640px;
+  height: 360px;
+  margin-bottom: 20px;
+  border: 2px solid #0099ff;
+  box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
+}
+
+/* Plot Containers */
+.plot-container {
+  width: 600px;
+  height: 300px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 153, 255, 0.4);
+  position: relative;
+}
+
+.plot-title {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+.plot-value {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+.plot {
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.axis-label {
+  font-size: 0.8rem;
+  color: #0099ff;
+  text-shadow: 0 0 5px rgba(0, 153, 255, 0.8);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #video-container,
+  .plot-container {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div id="time"></div>
+    <div id="compass">
+        <!-- Compass elements... -->
+    </div>
+
+    <div id="video-container">
+      <video id="video-stream" width="640" height="360" autoplay></video>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Humidity</div>
+      <div class="plot-value" id="humidity-value">50%</div>
+      <canvas class="plot" id="humidity-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Temperature</div>
+      <div class="plot-value" id="temperature-value">25°C</div>
+      <canvas class="plot" id="temperature-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Pressure</div>
+      <div class="plot-value" id="pressure-value">1000 hPa</div>
+      <canvas class="plot" id="pressure-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Accelerometer 1</div>
+      <div class="plot-value" id="accelerometer1-value">X: 0 m/s², Y: 0 m/s², Z: 9.8 m/s²</div>
+      <canvas class="plot" id="accelerometer1-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Accelerometer 2</div>
+      <div class="plot-value" id="accelerometer2-value">X: 0 m/s², Y: 0 m/s², Z: 9.8 m/s²</div>
+      <canvas class="plot" id="accelerometer2-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Accelerometer 3</div>
+      <div class="plot-value" id="accelerometer3-value">X: 0 m/s², Y: 0 m/s², Z: 9.8 m/s²</div>
+      <canvas class="plot" id="accelerometer3-plot" width="600" height="200"></canvas>
+    </div>
+
+    <div class="plot-container">
+      <div class="plot-title">Combined Acceleration</div>
+      <div class="plot-value" id="combined-acceleration-value">X: 0 m/s², Y: 0 m/s², Z: 9.8 m/s²</div>
+      <canvas class="plot" id="combined-acceleration-plot" width="600" height="200"></canvas>
+    </div>
+  </div>
+  <script>
+let humidityDataBuffer = [];
+let temperatureDataBuffer = [];
+let pressureDataBuffer = [];
+let accelerometerXDataBuffer = [];
+let accelerometerYDataBuffer = [];
+let accelerometerZDataBuffer = [];
+
+// Data arrays
+let humidityData = [];
+let temperatureData = [];
+let pressureData = [];
+let accelerometer1XDataBuffer = [];
+let accelerometer1YDataBuffer = [];
+let accelerometer1ZDataBuffer = [];
+let accelerometer2XDataBuffer = [];
+let accelerometer2YDataBuffer = [];
+let accelerometer2ZDataBuffer = [];
+let accelerometer3XDataBuffer = [];
+let accelerometer3YDataBuffer = [];
+let accelerometer3ZDataBuffer = [];
+
+// Data arrays
+let accelerometer1Data = [];
+let accelerometer2Data = [];
+let accelerometer3Data = [];
+// Function to draw a line plot on a canvas
+function drawLinePlot(ctx, data, label, maxValue, width, height) {
+  ctx.clearRect(0, 0, width, height);
+  ctx.beginPath();
+  ctx.moveTo(0, height);
+
+  const xScale = width / 9; // 10 points, 9 intervals
+  const yScale = height / maxValue;
+
+  // Draw the line
+  for (let i = 0; i < 10; i++) {
+    const x = i * xScale;
+    const y = height - (data[i] * yScale);
+    ctx.lineTo(x, y);
+  }
+
+  ctx.strokeStyle = '#0099ff';
+  ctx.stroke();
+
+  // Draw the points and labels
+  ctx.font = '12px Arial';
+  ctx.fillStyle = '#0099ff';
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i < 10; i++) {
+    const x = i * xScale;
+    const y = height - (data[i] * yScale);
+
+    // Draw the point
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the label
+    ctx.fillText(data[i].toFixed(2), x, y - 15);
+  }
+
+  // Draw axis labels
+  ctx.textAlign = 'center';
+  ctx.fillText('X', width, height + 15);
+  ctx.textAlign = 'left';
+  ctx.save();
+  ctx.translate(0, height / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center';
+  ctx.fillText('Y', 0, 0);
+  ctx.restore();
+}
+// Function to fetch humidity data from the server and update the plot
+function fetchHumidityData() {
+  fetch('/humidity-data')
+    .then(response => response.json())
+    .then(data => {
+      const humidityPlot = document.getElementById('humidity-plot');
+      const humidityValue = document.getElementById('humidity-value');
+      const ctx = humidityPlot.getContext('2d');
+
+      humidityDataBuffer.push(data.humidity);
+
+      if (humidityDataBuffer.length > 10) {
+        humidityDataBuffer.shift();
+      }
+
+      const averageHumidity = humidityDataBuffer.reduce((a, b) => a + b, 0) / humidityDataBuffer.length;
+      humidityData.push(averageHumidity);
+
+      if (humidityData.length > 10) {
+        humidityData.shift();
+      }
+
+      ctx.clearRect(0, 0, humidityPlot.width, humidityPlot.height);
+      drawLinePlot(ctx, humidityData, 'humidity', 100, humidityPlot.width, humidityPlot.height);
+      humidityValue.textContent = `${data.humidity.toFixed(2)}%`;
+    })
+    .catch(error => console.error('Error fetching humidity data:', error));
+}
+
+// Function to fetch temperature data from the server and update the plot
+function fetchTemperatureData() {
+  fetch('/temperature-data')
+    .then(response => response.json())
+    .then(data => {
+      const temperaturePlot = document.getElementById('temperature-plot');
+      const temperatureValue = document.getElementById('temperature-value');
+      const ctx = temperaturePlot.getContext('2d');
+
+      temperatureDataBuffer.push(data.temperature);
+
+      if (temperatureDataBuffer.length > 10) {
+        temperatureDataBuffer.shift();
+      }
+
+      const averageTemperature = temperatureDataBuffer.reduce((a, b) => a + b, 0) / temperatureDataBuffer.length;
+      temperatureData.push(averageTemperature);
+
+      if (temperatureData.length > 10) {
+        temperatureData.shift();
+      }
+
+      ctx.clearRect(0, 0, temperaturePlot.width, temperaturePlot.height);
+      drawLinePlot(ctx, temperatureData, 'temperature', 50, temperaturePlot.width, temperaturePlot.height);
+      temperatureValue.textContent = `${data.temperature.toFixed(2)}°C`;
+    })
+    .catch(error => console.error('Error fetching temperature data:', error));
+}
+
+// Function to fetch pressure data from the server and update the plot
+function fetchPressureData() {
+  fetch('/pressure-data')
+    .then(response => response.json())
+    .then(data => {
+      const pressurePlot = document.getElementById('pressure-plot');
+      const pressureValue = document.getElementById('pressure-value');
+      const ctx = pressurePlot.getContext('2d');
+
+      pressureDataBuffer.push(data.pressure);
+
+      if (pressureDataBuffer.length > 10) {
+        pressureDataBuffer.shift();
+      }
+
+      const averagePressure = pressureDataBuffer.reduce((a, b) => a + b, 0) / pressureDataBuffer.length;
+      pressureData.push(averagePressure);
+
+      if (pressureData.length > 10) {
+        pressureData.shift();
+      }
+
+      ctx.clearRect(0, 0, pressurePlot.width, pressurePlot.height);
+      drawLinePlot(ctx, pressureData, 'pressure', 1500, pressurePlot.width, pressurePlot.height);
+      pressureValue.textContent = `${data.pressure.toFixed(2)} hPa`;
+    })
+    .catch(error => console.error('Error fetching pressure data:', error));
+}
+// Function to fetch accelerometer data from the server and update the plots
+function fetchAccelerometerData() {
+  fetch('/accelerometer-data')
+    .then(response => response.json())
+    .then(data => {
+      updateAccelerometerPlot(data, 'accelerometer1');
+      updateAccelerometerPlot(data, 'accelerometer2');
+      updateAccelerometerPlot(data, 'accelerometer3');
+      updateCombinedAccelerationPlot(data, data, data);
+    })
+    .catch(error => console.error('Error fetching accelerometer data:', error));
+}
+
+function updateAccelerometerPlot(accelerometerData, accelerometerName) {
+  const plotId = `${accelerometerName}-plot`;
+  const valueId = `${accelerometerName}-value`;
+  const plot = document.getElementById(plotId);
+  const valueElement = document.getElementById(valueId);
+  const ctx = plot.getContext('2d');
+
+  // Check if accelerometerData is valid
+  const accelerometerDataObject = accelerometerData[accelerometerName];
+  if (!accelerometerDataObject || !accelerometerDataObject.x || !accelerometerDataObject.y || !accelerometerDataObject.z) {
+    console.error('Invalid accelerometer data:', accelerometerDataObject);
+    return;
+  }
+
+  const { x, y, z } = accelerometerDataObject;
+
+  // Update data buffers
+  if (accelerometerName === 'accelerometer1') {
+    accelerometer1XDataBuffer.push(x);
+    accelerometer1YDataBuffer.push(y);
+    accelerometer1ZDataBuffer.push(z);
+
+    if (accelerometer1XDataBuffer.length > 10) {
+      accelerometer1XDataBuffer.shift();
+      accelerometer1YDataBuffer.shift();
+      accelerometer1ZDataBuffer.shift();
+    }
+
+    accelerometer1Data = [
+      ...accelerometer1XDataBuffer,
+      ...accelerometer1YDataBuffer,
+      ...accelerometer1ZDataBuffer
+    ];
+  } else if (accelerometerName === 'accelerometer2') {
+    accelerometer2XDataBuffer.push(x);
+    accelerometer2YDataBuffer.push(y);
+    accelerometer2ZDataBuffer.push(z);
+
+    if (accelerometer2XDataBuffer.length > 10) {
+      accelerometer2XDataBuffer.shift();
+      accelerometer2YDataBuffer.shift();
+      accelerometer2ZDataBuffer.shift();
+    }
+
+    accelerometer2Data = [
+      ...accelerometer2XDataBuffer,
+      ...accelerometer2YDataBuffer,
+      ...accelerometer2ZDataBuffer
+    ];
+  } else if (accelerometerName === 'accelerometer3') {
+    accelerometer3XDataBuffer.push(x);
+    accelerometer3YDataBuffer.push(y);
+    accelerometer3ZDataBuffer.push(z);
+
+    if (accelerometer3XDataBuffer.length > 10) {
+      accelerometer3XDataBuffer.shift();
+      accelerometer3YDataBuffer.shift();
+      accelerometer3ZDataBuffer.shift();
+    }
+
+    accelerometer3Data = [
+      ...accelerometer3XDataBuffer,
+      ...accelerometer3YDataBuffer,
+      ...accelerometer3ZDataBuffer
+    ];
+  }
+
+  // Update value display
+  valueElement.textContent = `X: ${x.toFixed(2)} m/s², Y: ${y.toFixed(2)} m/s², Z: ${z.toFixed(2)} m/s²`;
+
+  // Draw the plot
+  drawAccelerationLinePlot(ctx, accelerometerData[accelerometerName], `${accelerometerName} acceleration`, plot.width, plot.height);
+}
+
+function drawAccelerationLinePlot(ctx, data, label, width, height) {
+  ctx.clearRect(0, 0, width, height);
+
+  const xScale = width / 9; // 10 points, 9 intervals
+
+  const values = Object.values(data);
+  const minValue = Math.min(...values.map(value => Math.min(value.x, value.y, value.z)));
+  const maxValue = Math.max(...values.map(value => Math.max(value.x, value.y, value.z)));
+
+  const yScale = height / (maxValue - minValue); // Adjust the scale based on the data range
+  const yOffset = height - (maxValue * yScale); // Offset to align the maximum value with the top of the canvas
+
+  // Draw X data
+  ctx.beginPath();
+  ctx.moveTo(0, yOffset);
+  for (let i = 0; i < 10; i++) {
+    const x = i * xScale;
+    const y = yOffset - ((data[i].x - minValue) * yScale);
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#0099ff';
+  ctx.stroke();
+
+  // Draw Y data
+  ctx.beginPath();
+  ctx.moveTo(0, yOffset);
+  for (let i = 0; i < 10; i++) {
+    const x = i * xScale;
+    const y = yOffset - ((data[i].y - minValue) * yScale);
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#00ff00';
+  ctx.stroke();
+
+  // Draw Z data
+  ctx.beginPath();
+  ctx.moveTo(0, yOffset);
+  for (let i = 0; i < 10; i++) {
+    const x = i * xScale;
+    const y = yOffset - ((data[i].z - minValue) * yScale);
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#ff0000';
+  ctx.stroke();
+
+  // Draw axis labels
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#000000';
+  ctx.fillText(label, width / 2, height + 15);
+
+  // Draw axis labels
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#000000';
+  ctx.fillText('0', 0, yOffset);
+  ctx.fillText('+' + maxValue.toFixed(2), width, yOffset - (maxValue - minValue) * yScale);
+  ctx.fillText('-' + (-minValue).toFixed(2), width, yOffset);
+}
+function updateAccelerometerPlot(accelerometerData, accelerometerName) {
+  const plotId = `${accelerometerName}-plot`;
+  const valueId = `${accelerometerName}-value`;
+  const plot = document.getElementById(plotId);
+  const valueElement = document.getElementById(valueId);
+  const ctx = plot.getContext('2d');
+
+  // Check if accelerometerData is valid
+  const accelerometerDataObject = accelerometerData[accelerometerName];
+  if (!accelerometerDataObject || !accelerometerDataObject.x || !accelerometerDataObject.y || !accelerometerDataObject.z) {
+    console.error('Invalid accelerometer data:', accelerometerDataObject);
+    return;
+  }
+
+  const { x, y, z } = accelerometerDataObject;
+
+  // Update data buffers
+  if (accelerometerName === 'accelerometer1') {
+    accelerometer1XDataBuffer.push(x);
+    accelerometer1YDataBuffer.push(y);
+    accelerometer1ZDataBuffer.push(z);
+
+    if (accelerometer1XDataBuffer.length > 10) {
+      accelerometer1XDataBuffer.shift();
+      accelerometer1YDataBuffer.shift();
+      accelerometer1ZDataBuffer.shift();
+    }
+
+    accelerometer1Data = [
+      ...accelerometer1XDataBuffer,
+      ...accelerometer1YDataBuffer,
+      ...accelerometer1ZDataBuffer
+    ];
+  } else if (accelerometerName === 'accelerometer2') {
+    accelerometer2XDataBuffer.push(x);
+    accelerometer2YDataBuffer.push(y);
+    accelerometer2ZDataBuffer.push(z);
+
+    if (accelerometer2XDataBuffer.length > 10) {
+      accelerometer2XDataBuffer.shift();
+      accelerometer2YDataBuffer.shift();
+      accelerometer2ZDataBuffer.shift();
+    }
+
+    accelerometer2Data = [
+      ...accelerometer2XDataBuffer,
+      ...accelerometer2YDataBuffer,
+      ...accelerometer2ZDataBuffer
+    ];
+  } else if (accelerometerName === 'accelerometer3') {
+    accelerometer3XDataBuffer.push(x);
+    accelerometer3YDataBuffer.push(y);
+    accelerometer3ZDataBuffer.push(z);
+
+    if (accelerometer3XDataBuffer.length > 10) {
+      accelerometer3XDataBuffer.shift();
+      accelerometer3YDataBuffer.shift();
+      accelerometer3ZDataBuffer.shift();
+    }
+
+    accelerometer3Data = [
+      ...accelerometer3XDataBuffer,
+      ...accelerometer3YDataBuffer,
+      ...accelerometer3ZDataBuffer
+    ];
+  }
+
+  // Update value display
+  valueElement.textContent = `X: ${x.toFixed(2)} m/s², Y: ${y.toFixed(2)} m/s², Z: ${z.toFixed(2)} m/s²`;
+
+  // Draw the plot
+  const maxValue = 25; // Adjust this value as needed
+  const accelerometerDataArray = accelerometerData[accelerometerName];
+  drawAccelerationLinePlot(ctx, accelerometerData[accelerometerName], `${accelerometerName} acceleration`, maxValue, plot.width, plot.height);
+}
+
+
+function updateCombinedAccelerationPlot(accelerometer1, accelerometer2, accelerometer3) {
+  const plot = document.getElementById('combined-acceleration-plot');
+  const valueElement = document.getElementById('combined-acceleration-value');
+  const ctx = plot.getContext('2d');
+
+  const xDataBuffer = [];
+  const yDataBuffer = [];
+  const zDataBuffer = [];
+
+  const x1 = accelerometer1.x;
+  const y1 = accelerometer1.y;
+  const z1 = accelerometer1.z;
+
+  const x2 = accelerometer2.x;
+  const y2 = accelerometer2.y;
+  const z2 = accelerometer2.z;
+
+  const x3 = accelerometer3.x;
+  const y3 = accelerometer3.y;
+  const z3 = accelerometer3.z;
+
+  const xCombined = (x1 + x2 + x3) / 3;
+  const yCombined = (y1 + y2 + y3) / 3;
+  const zCombined = (z1 + z2 + z3) / 3;
+
+  xDataBuffer.push(xCombined);
+  yDataBuffer.push(yCombined);
+  zDataBuffer.push(zCombined);
+
+  if (xDataBuffer.length > 10) {
+    xDataBuffer.shift();
+  }
+  if (yDataBuffer.length > 10) {
+    yDataBuffer.shift();
+  }
+  if (zDataBuffer.length > 10) {
+    zDataBuffer.shift();
+  }
+
+  const xData = xDataBuffer.slice(-10);
+  const yData = yDataBuffer.slice(-10);
+  const zData = zDataBuffer.slice(-10);
+
+  const maxValue = 25; // Adjust this value as needed
+
+  const plotHeight = plot.height / 3;
+
+  ctx.clearRect(0, 0, plot.width, plot.height);
+  drawLinePlot(ctx, xData, 'X', maxValue, plot.width, plotHeight, '#ff0000');
+  drawLinePlot(ctx, yData, 'Y', maxValue, plot.width, plotHeight, '#00ff00', plotHeight);
+  drawLinePlot(ctx, zData, 'Z', maxValue, plot.width, plotHeight, '#0000ff', plotHeight * 2);
+
+  valueElement.textContent = `X: ${xCombined.toFixed(2)} m/s², Y: ${yCombined.toFixed(2)} m/s², Z: ${zCombined.toFixed(2)} m/s²`;
+}
+// Update the accelerometer data plots every second
+setInterval(fetchAccelerometerData, 1000);
+// Call the functions to fetch data and update the dashboard
+fetchHumidityData();
+fetchTemperatureData();
+fetchPressureData();
+fetchAccelerometerData();
+
+// Update the data plots every second
+setInterval(fetchHumidityData, 1000);
+setInterval(fetchTemperatureData, 1000);
+setInterval(fetchPressureData, 1000);
+setInterval(fetchAccelerometerData, 1000);
+</script>
+</body>
